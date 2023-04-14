@@ -1,17 +1,39 @@
-## My Project
+# Android Automotive OS pipeline (DRAFT)
 
-TODO: Fill this README out!
+## Getting started
 
-Be sure to:
+Install both cdk and projen
 
-* Change the title in this README
-* Edit your repository description on GitHub
+```
+npm install -g aws-cdk projen
+```
 
-## Security
+Run projen to install all dependencies and install the pipeline stack
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+```
+cd aws-aaos-pipeline
+projen
+pip install -r requirements-dev.txt
+cdk deploy -- aws-aaos-pipeline
+```
+
+once the stack has been deployed and the pipeline has run successfully (about 2.5h) you can deploy the target stack
+
+```
+cdk deploy -- aws-aaos-target
+```
+
+## TBD
+
+- Patch android code to add stun server ip (not sure why we need this...can we avoid it?)
+- Add valid certificate
+- whitelist ips
 
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
 
+- [Changelog](CHANGELOG.md) of the project.
+- [License](LICENSE) of the project.
+- [Code of Conduct](CODE_OF_CONDUCT.md) of the project.
+- [CONTRIBUTING](CONTRIBUTING.md) for more information.

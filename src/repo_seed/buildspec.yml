@@ -1,0 +1,48 @@
+version: '0.2'
+env:
+  shell: bash
+  variables:
+    TARGET_BRANCH: "android-12.1.0_r11"
+    TARGET_PRODUCT: "aosp_cf_arm64_auto"
+    TARGET_BUILD_VARIANT: "userdebug"
+  exported-variables:
+    - TARGET_BRANCH
+    - TARGET_PRODUCT
+    - TARGET_BUILD_VARIANT
+phases:
+  install:
+    run-as: root
+    commands:
+      - >-
+        apt-get -y update && apt-get install -y --no-install-recommends 
+        build-essential file apt-utils flex bison gperf 
+        git vim zip curl ssh zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 
+        x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev libxml2-utils 
+        xsltproc unzip libncurses5 uuid uuid-dev zlib1g-dev liblz-dev liblzo2-2 
+        liblzo2-dev lzop u-boot-tools mtd-utils android-sdk-libsparse-utils 
+        openjdk-8-jdk device-tree-compiler gdisk m4 libz-dev bc rsync wget 
+        apt-transport-https
+      - ulimit -n 4096
+      - curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo
+      - chmod a+x /bin/repo
+      - sed -i '1s/python/python3/' /bin/repo
+  pre_build:
+    commands:
+      - mkdir -p /build/$TARGET_BRANCH
+      - cd /build/$TARGET_BRANCH
+      - echo $TARGET_BRANCH
+      - repo init --depth=1 -u https://android.googlesource.com/platform/manifest -b $TARGET_BRANCH
+      - repo sync -c -j 8
+  build:
+    commands:
+      - cd /build/$TARGET_BRANCH
+      - >-
+        pushd device/google/cuttlefish && 
+        sed "181 i sig_server.AddParameter(\"-stun_server=\", \"142.250.9.127\");"  host/commands/run_cvd/launch_streamer.cpp > launch_streamer.cpp.patch && 
+        cp launch_streamer.cpp.patch host/commands/run_cvd/launch_streamer.cpp && 
+        cat  host/commands/run_cvd/launch_streamer.cpp && 
+        popd
+      - source build/envsetup.sh && lunch $TARGET_PRODUCT-$TARGET_BUILD_VARIANT && m -j $(nproc) dist
+      - aws s3 cp out/dist/cvd-host_package.tar.gz s3://$BUCKET_NAME/
+      - aws s3 cp out/dist/$TARGET_PRODUCT-img-eng.root.zip s3://$BUCKET_NAME/images.zip
+      - aws s3 cp device/google/cuttlefish_prebuilts/bootloader/crosvm_aarch64/u-boot.bin s3://$BUCKET_NAME/
