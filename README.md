@@ -23,12 +23,6 @@ once the stack has been deployed and the pipeline has run successfully (about 2.
 cdk deploy -- aws-aaos-target
 ```
 
-## TBD
-
-- Patch android code to add stun server ip (not sure why we need this...can we avoid it?)
-- Add valid certificate
-- whitelist ips
-
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
