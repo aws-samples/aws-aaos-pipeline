@@ -14,13 +14,13 @@ Run projen to install all dependencies and install the pipeline stack
 cd aws-aaos-pipeline
 projen
 pip install -r requirements-dev.txt
-cdk deploy -- aws-aaos-pipeline
+cdk deploy aws-aaos-pipeline
 ```
 
 once the stack has been deployed and the pipeline has run successfully (about 2.5h) you can deploy the target stack
 
 ```
-cdk deploy -- aws-aaos-target
+cdk deploy aws-aaos-target
 ```
 
 ## License
