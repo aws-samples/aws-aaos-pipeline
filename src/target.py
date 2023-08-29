@@ -25,8 +25,8 @@ class TargetStack(Stack):
     target_sg.add_ingress_rule(ec2.Peer.ipv4('0.0.0.0/0'), ec2.Port.tcp(6520), 'ADB for Android Studio or shell');
     target_sg.add_ingress_rule(ec2.Peer.ipv4('0.0.0.0/0'), ec2.Port.tcp(6444), 'VNC -- if using');
     # Allow TCP and UDP traffic from port 15550 to port 15599
-    target_sg.add_ingress_rule(ec2.Peer.ipv4('51.186.0.195/0'), ec2.Port.tcp_range(15550, 15599), 'Allow webrtc tcp traffic');
-    target_sg.add_ingress_rule(ec2.Peer.ipv4('51.186.0.195/0'), ec2.Port.udp_range(15550, 15599), 'Allow webrtc udp traffic');
+    target_sg.add_ingress_rule(ec2.Peer.ipv4('0.0.0.0/0'), ec2.Port.tcp_range(15550, 15599), 'Allow webrtc tcp traffic');
+    target_sg.add_ingress_rule(ec2.Peer.ipv4('0.0.0.0/0'), ec2.Port.udp_range(15550, 15599), 'Allow webrtc udp traffic');
     
     role = iam.Role(self, 'ec2Role',
       assumed_by=iam.ServicePrincipal('ec2.amazonaws.com'),
