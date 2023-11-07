@@ -46,7 +46,8 @@ phases:
         pushd device/generic/goldfish/audio && 
         sed "303 i     case xsd::AudioDevice::AUDIO_DEVICE_OUT_BUS:" device_port_sink.cpp > device_port_sink.cpp.1 &&
         sed "317 d" device_port_sink.cpp.1 > device_port_sink.cpp.2 &&
-        cp device_port_sink.cpp.2 device_port_sink.cpp
+        cp device_port_sink.cpp.2 device_port_sink.cpp &&
+        popd
       - source build/envsetup.sh && lunch $TARGET_PRODUCT-$TARGET_BUILD_VARIANT && m -j $(nproc) dist
       - aws s3 cp out/dist/cvd-host_package.tar.gz s3://$BUCKET_NAME/
       - aws s3 cp out/dist/$TARGET_PRODUCT-img-eng.root.zip s3://$BUCKET_NAME/images.zip
