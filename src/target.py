@@ -80,7 +80,7 @@ class TargetStack(Stack):
       "Type=simple",
       "User=ubuntu",
       "Group=ubuntu",
-      "ExecStart=/bin/sh -c 'yes Y | /home/ubuntu/stage/bin/launch_cvd'",
+      "ExecStart=/bin/sh -c 'yes Y | /home/ubuntu/stage/bin/launch_cvd -enable_audio'",
       "ExecStop=/home/ubuntu/stage/bin/stop_cvd",
       "[Install]",
       "WantedBy=multi-user.target",
